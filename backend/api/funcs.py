@@ -33,7 +33,7 @@ def leer_chat_whatsapp(archivo):
             except IndexError:
                 pass
 
-    data = data[:3]
+    data = data[3:]
     df = pd.DataFrame(data, columns=["Fecha", "Hora", "Remitente", "Mensaje"])
     return df
 
