@@ -21,6 +21,9 @@ class Chat(models.Model):
         json_data = df.to_json(orient="records")
         return json_data
 
+    def __str__(self):
+        return self.Title
+
 
 class Message(models.Model):
     Date = models.DateField()
@@ -28,6 +31,9 @@ class Message(models.Model):
     Sender = models.CharField(max_length=50)
     Message = models.TextField(max_length=1000)
     Chat = models.ForeignKey(Chat, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"{self.Sender} - {self.Date} {self.Time}"
 
 
 @receiver(post_save, sender=Chat)
