@@ -1,4 +1,6 @@
 import pandas as pd
+from datetime import datetime
+import re
 
 
 def leer_chat_whatsapp(archivo):
@@ -13,17 +15,26 @@ def leer_chat_whatsapp(archivo):
             fecha_hora, contenido = mensaje.split(" - ")
             fecha, hora = fecha_hora.split(", ")
             remitente, mensaje = contenido.split(": ")
+
+            # Ajustar el formato de fecha
+
+            try:
+                fecha = datetime.strptime(fecha, "%d/%m/%Y").strftime("%Y-%m-%d")
+            except Exception:
+                continue
+            try:
+                hora = re.sub(
+                    r"[^\d:]", "", hora
+                )  # Eliminar caracteres especiales excepto dígitos y ":"
+                hora = datetime.strptime(hora, "%I:%M%p").strftime("%H:%M:%S")
+            except ValueError:
+                continue
             data.append([fecha, hora, remitente, mensaje.strip()])
         except ValueError:
-            try:
-                print(f"La multilinea es asi: {data[-1][3]} y se le agrega: {mensaje}")
-
-                data[-1][3] = data[-1][3] + mensaje
-            except IndexError:
-                pass
-    # print(data)
+            data.append([mensaje])
+    print(" ".join(str(elemento) for elemento in data[:10]))
+    data = data[3:]
     df = pd.DataFrame(data, columns=["Fecha", "Hora", "Remitente", "Mensaje"])
-
     return df
 
 
