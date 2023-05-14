@@ -22,3 +22,10 @@ def getChat(request, pk):
     json_data = chat.ChatToJson
     # print(json_data)
     return Response(json_data)
+
+
+@api_view(["GET"])
+def getChats(request):
+    chats = Chat.objects.all().filter(User=request.user)
+    serializer = ChatSerializer(chats, many=True)
+    return Response(serializer.data)

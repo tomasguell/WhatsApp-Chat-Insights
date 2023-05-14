@@ -63,7 +63,7 @@ def populate_senders(sender, instance, created, **kwargs):
     if created:
         df_chat = instance.ChatToDf
         user = instance.User
-        print(user)
+        # print(user)
         remitentes_unicos = obtener_remitentes(df_chat)
 
         sender_objects = []
@@ -92,7 +92,7 @@ def populate_messages(sender, instance, created, **kwargs):
 
             try:
                 sender = Sender.objects.get(Name=sender_name)
-                print(sender.Name)
+                # print(sender.Name)
             except Exception:
                 print(sender.Name, "GUARDA CULIAU")
                 pass
