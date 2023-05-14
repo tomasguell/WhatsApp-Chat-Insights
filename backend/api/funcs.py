@@ -40,7 +40,7 @@ def leer_chat_whatsapp(archivo):
 
     data = data[3:]
     df = pd.DataFrame(data, columns=["Fecha", "Hora", "Remitente", "Mensaje"])
-    print(obtener_remitentes(df))
+    # print(obtener_remitentes(df))
     return df
 
 
