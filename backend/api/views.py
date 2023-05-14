@@ -9,7 +9,7 @@ from .serializers import ChatSerializer
 
 
 @api_view(["GET", "POST"])
-def Chat(request, pk):
+def GetChat(request, pk):
     if request.method == "GET":
         chat = Chat.objects.get(id=pk)
         # print(chat.File, type(chat.File))
