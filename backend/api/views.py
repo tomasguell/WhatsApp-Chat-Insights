@@ -20,5 +20,5 @@ def getChat(request, pk):
     print(df)"""
 
     json_data = chat.ChatToJson
-    print(json_data)
+    # print(json_data)
     return Response(json_data)

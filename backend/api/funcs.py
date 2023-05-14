@@ -3,6 +3,11 @@ from datetime import datetime, time
 import re
 
 
+def obtener_remitentes(df):
+    remitentes = df["Remitente"].unique().tolist()
+    return remitentes
+
+
 def leer_chat_whatsapp(archivo):
     # Leer el archivo de texto
     with open(archivo, "r", encoding="utf-8") as file:
@@ -35,6 +40,7 @@ def leer_chat_whatsapp(archivo):
 
     data = data[3:]
     df = pd.DataFrame(data, columns=["Fecha", "Hora", "Remitente", "Mensaje"])
+    print(obtener_remitentes(df))
     return df
 
 
