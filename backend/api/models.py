@@ -41,9 +41,10 @@ class Chat(models.Model):
 class Sender(models.Model):
     Name = models.CharField(max_length=30)
     # Chat = models.ForeignKey(Chat, on_delete=models.CASCADE)
+    User = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):
-        return f"{self.Name} - "  # {self.Chat.Title}"
+        return f"{self.Name} - Creado por {self.User} "  # {self.Chat.Title}"
 
 
 class Message(models.Model):
@@ -54,23 +55,29 @@ class Message(models.Model):
     Chat = models.ForeignKey(Chat, on_delete=models.CASCADE)
 
     def __str__(self):
-        return f"{self.Sender} - {self.Date} {self.Time}"
+        return f"{self.Sender.Name} - {self.Date} {self.Time}"
 
 
 @receiver(post_save, sender=Chat)
 def populate_senders(sender, instance, created, **kwargs):
     if created:
         df_chat = instance.ChatToDf
+        user = instance.User
+        print(user)
         remitentes_unicos = obtener_remitentes(df_chat)
 
         sender_objects = []
         for remitente in remitentes_unicos:
-            sender, created = Sender.objects.get_or_create(Name=remitente)
+            sender, created = Sender.objects.get_or_create(Name=remitente, User=user)
+            # print(sender)
             if created:
+                print("LLEGE A LA CONDICION")
                 sender_objects.append(sender)
-        print(sender_objects)
-
-        Sender.objects.bulk_create(sender_objects)
+                sender.save()
+                print(f"{sender.id}{sender.Name} - {sender.User}")
+        # print(sender_objects)
+        # print(sender_objects)
+        # Sender.objects.bulk_create(sender_objects)
 
 
 @receiver(post_save, sender=Chat)
@@ -87,7 +94,7 @@ def populate_messages(sender, instance, created, **kwargs):
                 sender = Sender.objects.get(Name=sender_name)
                 print(sender.Name)
             except Exception:
-                print(sender.Name)
+                print(sender.Name, "GUARDA CULIAU")
                 pass
             message = Message(
                 Date=message_data["Fecha"],
