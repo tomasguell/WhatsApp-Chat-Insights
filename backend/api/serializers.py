@@ -13,7 +13,7 @@ class ChatSerializer(ModelSerializer):
 
     class Meta:
         model = Chat
-        fields = ("id", "Title", "participantes")
+        fields = ("id", "Title", "participantes", "File")
 
     def get_participantes(self, chat):
         senders = (

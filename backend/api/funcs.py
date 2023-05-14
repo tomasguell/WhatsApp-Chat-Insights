@@ -44,6 +44,14 @@ def leer_chat_whatsapp(archivo):
     return df
 
 
+def enumerateSenders():
+    from .models import Sender
+
+    senders = list(Sender.objects.all())
+    for sender in senders:
+        print(f"Id: {sender.id} Nombre: {sender.Name}")
+
+
 """# Ejemplo de uso
 ruta_archivo = "ruta/del/archivo.txt"
 df_chat = leer_chat_whatsapp(ruta_archivo)

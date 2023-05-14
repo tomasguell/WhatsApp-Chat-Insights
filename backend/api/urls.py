@@ -6,6 +6,12 @@ urlpatterns = [
     path("chats/<str:pk>/stats", views.ChatStats, name="chatStats"),
     path("chats", views.Chats, name="chats"),
     path("sender/<str:pks>/content", views.SenderContent, name="senderContent"),
+    path("sender/<str:pks>/stats", views.SenderStats, name="senderStats"),
+    path(
+        "sender/<str:pks>/stats/<str:pkc>",
+        views.SenderStatsChat,
+        name="senderStatsChat",
+    ),
     path(
         "sender/<str:pks>/content/<str:pkc>",
         views.SenderContentChat,
