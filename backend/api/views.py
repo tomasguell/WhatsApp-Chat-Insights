@@ -48,14 +48,14 @@ def SenderContentChat(request, pks, pkc):  # pks (s de sender)
         messages = Message.objects.all().filter(Sender__id=pks, Chat__id=pkc)
 
         serializer = MessageSerializer(messages, many=True)
-        data = serializer.data
+        """  data = serializer.data
         response_data = {
             "sender": Sender.objects.get(id=pks).Name,
             "chat": Chat.objects.get(id=pkc).Title,
             "content": data,
-        }
+        }"""
 
-        return Response(response_data)
+        return Response(serializer.data)
 
 
 @api_view(["GET", "POST"])

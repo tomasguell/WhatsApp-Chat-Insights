@@ -1,5 +1,11 @@
 from rest_framework.serializers import ModelSerializer, SerializerMethodField
-from .models import Chat, Message
+from .models import Chat, Message, Sender
+
+
+class SenderSerializer(ModelSerializer):
+    class Meta:
+        model = Sender
+        fields = ("id", "Name")
 
 
 class ChatSerializer(ModelSerializer):
@@ -7,7 +13,7 @@ class ChatSerializer(ModelSerializer):
 
     class Meta:
         model = Chat
-        fields = "__all__"
+        fields = ("id", "Title", "participantes")
 
     def get_participantes(self, chat):
         senders = (
@@ -16,7 +22,22 @@ class ChatSerializer(ModelSerializer):
         return list(senders)
 
 
+class SenderSerializerReducido(ModelSerializer):
+    class Meta:
+        model = Sender
+        fields = ("Name",)
+
+
+class ChatSerializerReducido(ModelSerializer):
+    class Meta:
+        model = Chat
+        fields = ("Title",)
+
+
 class MessageSerializer(ModelSerializer):
+    Sender = SenderSerializerReducido()
+    Chat = ChatSerializerReducido()
+
     class Meta:
         model = Message
         fields = "__all__"
