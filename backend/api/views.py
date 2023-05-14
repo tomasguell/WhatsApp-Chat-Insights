@@ -8,24 +8,28 @@ from .serializers import ChatSerializer
 # Create your views here.
 
 
-@api_view(["GET"])
-def getChat(request, pk):
-    chat = Chat.objects.get(id=pk)
-    # print(chat.File, type(chat.File))
-    # print(archivo_path)
-    """serializer = ChatSerializer(chat, many=False)
-    filePath = "../backend" + serializer.data["File"]
-    print(serializer.data["File"], type(serializer.data["File"]))
-    df = leer_chat_whatsapp(filePath)
-    print(df)"""
+@api_view(["GET", "POST"])
+def Chat(request, pk):
+    if request.method == "GET":
+        chat = Chat.objects.get(id=pk)
+        # print(chat.File, type(chat.File))
+        # print(archivo_path)
+        """serializer = ChatSerializer(chat, many=False)
+        filePath = "../backend" + serializer.data["File"]
+        print(serializer.data["File"], type(serializer.data["File"]))
+        df = leer_chat_whatsapp(filePath)
+        print(df)"""
 
-    json_data = chat.ChatToJson
-    # print(json_data)
-    return Response(json_data)
+        json_data = chat.ChatToJson
+        # print(json_data)
+        return Response(json_data)
 
 
-@api_view(["GET"])
-def getChats(request):
-    chats = Chat.objects.all().filter(User=request.user)
-    serializer = ChatSerializer(chats, many=True)
-    return Response(serializer.data)
+@api_view(["GET", "POST"])
+def Chats(request):
+    if request.method == "GET":
+        chats = Chat.objects.all().filter(User=request.user)
+        serializer = ChatSerializer(chats, many=True)
+        return Response(serializer.data)
+    elif request.method == "POST":
+        pass
