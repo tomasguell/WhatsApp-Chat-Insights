@@ -1,28 +1,31 @@
 from django.shortcuts import render
 from rest_framework.response import Response
 from .funcs import leer_chat_whatsapp
-from .models import Chat
+from .models import Chat, Message
 from rest_framework.decorators import api_view
-from .serializers import ChatSerializer
+from .serializers import ChatSerializer, MessageSerializer
 
 # Create your views here.
 
 
 @api_view(["GET", "POST"])
-def GetChat(request, pk):
+def ChatContent(request, pk):
     if request.method == "GET":
-        chat = Chat.objects.get(id=pk)
-        # print(chat.File, type(chat.File))
-        # print(archivo_path)
-        """serializer = ChatSerializer(chat, many=False)
-        filePath = "../backend" + serializer.data["File"]
-        print(serializer.data["File"], type(serializer.data["File"]))
-        df = leer_chat_whatsapp(filePath)
-        print(df)"""
+        messages = Message.objects.all().filter(Chat__id=pk)
+        serializer = MessageSerializer(messages, many=True)
+        return Response(serializer.data)
 
-        json_data = chat.ChatToJson
-        # print(json_data)
-        return Response(json_data)
+
+@api_view(["GET", "POST"])
+def ChatStats(request, pk):
+    if request.method == "GET":
+        messages = Message.objects.all().filter(Chat__id=pk)
+        message_count = messages.count()
+        response_data = {"message_count": message_count}
+        # serializer = MessageSerializer(messages, many=True)
+        return Response(
+            response_data
+        )  # Quiero que returnee el numero de mensajes del chat
 
 
 @api_view(["GET", "POST"])
