@@ -62,6 +62,8 @@ class Message(models.Model):
 def populate_senders(sender, instance, created, **kwargs):
     if created:
         df_chat = instance.ChatToDf
+        print("Llege a popular")
+
         user = instance.User
         # print(user)
         remitentes_unicos = obtener_remitentes(df_chat)
@@ -83,7 +85,9 @@ def populate_senders(sender, instance, created, **kwargs):
 @receiver(post_save, sender=Chat)
 def populate_messages(sender, instance, created, **kwargs):
     if created:
+        print("Llege a popular")
         json_data = instance.ChatToJson
+        # print(json_data)
         messages = json.loads(json_data)
         message_objects = []
 
@@ -92,10 +96,10 @@ def populate_messages(sender, instance, created, **kwargs):
 
             try:
                 sender = Sender.objects.get(Name=sender_name)
-                # print(sender.Name)
+                print(sender.Name)
             except Exception:
                 print(sender.Name, "GUARDA CULIAU")
-                pass
+            # pass
             message = Message(
                 Date=message_data["Fecha"],
                 Time=message_data["Hora"],

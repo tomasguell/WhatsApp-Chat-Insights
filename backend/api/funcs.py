@@ -16,12 +16,18 @@ def leer_chat_whatsapp(archivo):
     # Extraer información del formato de WhatsApp y crear el DataFrame
     data = []
     for mensaje in contenido:
+        # print(mensaje)
         try:
             fecha_hora, contenido = mensaje.split(" - ")
             fecha, hora = fecha_hora.split(", ")
             remitente, mensaje = contenido.split(": ")
 
-            fecha = datetime.strptime(fecha, "%d/%m/%Y").strftime("%Y-%m-%d")
+            # Convertir la fecha al formato YYYY-MM-DD si viene en formato dd/mm/yyyy o d/m/yy
+            if "/" in fecha:
+                try:
+                    fecha = datetime.strptime(fecha, "%d/%m/%Y").strftime("%Y-%m-%d")
+                except ValueError:
+                    fecha = datetime.strptime(fecha, "%d/%m/%y").strftime("%Y-%m-%d")
 
             try:
                 hora = re.sub(
@@ -36,11 +42,14 @@ def leer_chat_whatsapp(archivo):
             try:
                 data[-1][3] = data[-1][3] + mensaje
             except IndexError:
-                pass
+                data.append([fecha, hora, remitente, mensaje.strip()])
 
-    data = data[3:]
+    # print(data)
+    # data = data[3:]
+
     df = pd.DataFrame(data, columns=["Fecha", "Hora", "Remitente", "Mensaje"])
-    # print(obtener_remitentes(df))
+    print(obtener_remitentes(df))
+    print(df)
     return df
 
 
